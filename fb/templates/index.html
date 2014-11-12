@@ -1,0 +1,12 @@
+<html>
+  <head>
+    <title>My facebook app</title>
+  </head>
+  <body>
+    <h1>News feed</h1>
+    {% for post in posts %}
+      <h3>{{ post.text }}</h3>
+      by <b>{{ post.author }}</b> on <b>{{ post.date_added }}</b>
+    {% endfor %}
+  </body>
+</html>
