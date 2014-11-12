@@ -18,3 +18,25 @@ System prerequisites
   ```
   sudo pip install Django==1.6.2
   ```
+  
+Project installation
+--------------------
+
+1. Clone repository:
+
+  ```
+  git clone git@github.com:eaudeweb/purepython-project.git
+  ```
+
+2. Initialize database:
+
+  ```
+  cd purepython-project
+  ./manage.py syncdb
+  ```
+  
+3. Run development server:
+
+  ```
+  ./manage.py runserver
+  ```
