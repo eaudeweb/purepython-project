@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from fb.models import UserPost
+
+
+admin.site.register(UserPost)
