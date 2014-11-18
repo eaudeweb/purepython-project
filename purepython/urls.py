@@ -6,6 +6,6 @@ from fb.views import index
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', index),
+    url(r'^$', index, name='index'),
     url(r'^admin/', include(admin.site.urls)),
 )

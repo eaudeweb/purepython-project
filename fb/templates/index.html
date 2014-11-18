@@ -4,9 +4,17 @@
   </head>
   <body>
     <h1>News feed</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Post"/>
+    </form>
+
     {% for post in posts %}
       <h3>{{ post.text }}</h3>
       by <b>{{ post.author }}</b> on <b>{{ post.date_added }}</b>
+      <hr>
     {% endfor %}
   </body>
 </html>
