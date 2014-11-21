@@ -25,7 +25,7 @@ Project installation
 1. Clone repository:
 
   ```
-  git clone git@github.com:eaudeweb/purepython-project.git
+  git clone https://github.com/eaudeweb/purepython-project.git
   ```
 
 2. Initialize database:
