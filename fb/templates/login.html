@@ -6,4 +6,7 @@
     {{ form.as_p }}
     <button type="submit">Log In</button>
   </form>
+  {% if message %}
+    {{ message }}
+  {% endif %}
 {% endblock %}

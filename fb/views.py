@@ -70,7 +70,7 @@ def login_view(request):
         else:
             context = {
                 'form': login_form,
-                'message': 'Wrong user or password!',
+                'message': 'Wrong user and/or password!',
             }
             return render(request, 'login.html', context)
 
