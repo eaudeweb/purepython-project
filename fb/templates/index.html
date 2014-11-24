@@ -18,7 +18,7 @@
 
     <a href="{% url 'post_details' post.pk %}"><small>see more</small></a>
     <br>
-    by <b><small>{{ post.author }}</small></b> on <b><small>{{ post.date_added }}</small></b>
+    by <b><small>{{ post.author.username }}</small></b> on <b><small>{{ post.date_added }}</small></b>
     <hr>
   {% endfor %}
 {% endblock %}

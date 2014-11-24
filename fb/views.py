@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 from fb.models import UserPost, UserPostComment
-from fb.forms import UserPostForm, UserPostCommentForm
+from fb.forms import UserPostForm, UserPostCommentForm, UserLogin
 
 
+@login_required
 def index(request):
     posts = UserPost.objects.all()
     if request.method == 'GET':
@@ -12,7 +16,7 @@ def index(request):
         form = UserPostForm(request.POST)
         if form.is_valid():
             text = form.cleaned_data['text']
-            post = UserPost(text=text)
+            post = UserPost(text=text, author=request.user)
             post.save()
 
     context = {
@@ -22,6 +26,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+@login_required
 def post_details(request, pk):
     post = UserPost.objects.get(pk=pk)
 
@@ -31,7 +36,9 @@ def post_details(request, pk):
         form = UserPostCommentForm(request.POST)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            comment = UserPostComment(text=cleaned_data['text'], post=post)
+            comment = UserPostComment(text=cleaned_data['text'],
+                                      post=post,
+                                      author=request.user)
             comment.save()
 
     comments = UserPostComment.objects.filter(post=post)
@@ -43,3 +50,31 @@ def post_details(request, pk):
     }
 
     return render(request, 'post_details.html', context)
+
+
+def login_view(request):
+    if request.method == 'GET':
+        login_form = UserLogin()
+        context = {
+            'form': login_form,
+        }
+        return render(request, 'login.html', context)
+    if request.method == 'POST':
+        login_form = UserLogin(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            context = {
+                'form': login_form,
+                'message': 'Wrong user or password!',
+            }
+            return render(request, 'login.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse('login'))
