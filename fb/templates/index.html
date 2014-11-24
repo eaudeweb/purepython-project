@@ -1,20 +1,24 @@
-<html>
-  <head>
-    <title>My facebook app</title>
-  </head>
-  <body>
-    <h1>News feed</h1>
+{% extends 'layout.html' %}
 
-    <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Post"/>
-    </form>
+{% block content %}
+  <h1>News feed</h1>
 
-    {% for post in posts %}
-      <h3>{{ post.text }}</h3>
-      by <b>{{ post.author }}</b> on <b>{{ post.date_added }}</b>
-      <hr>
-    {% endfor %}
-  </body>
-</html>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.text }}
+    <input type="submit" value="Post"/>
+  </form>
+
+  {% for post in posts %}
+    {% if post.text|length >= 15 %}
+      <h3>{{ post.text|slice:":15" }}...</h3>
+    {% else %}
+      <h3>{{ post.text}}</h3>
+    {% endif %}
+
+    <a href="{% url 'post_details' post.pk %}"><small>see more</small></a>
+    <br>
+    by <b><small>{{ post.author }}</small></b> on <b><small>{{ post.date_added }}</small></b>
+    <hr>
+  {% endfor %}
+{% endblock %}
