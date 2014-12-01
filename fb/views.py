@@ -78,11 +78,13 @@ def login_view(request):
             return render(request, 'login.html', context)
 
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect(reverse('login'))
 
 
+@login_required
 def profile_view(request, pk):
     profile = UserProfile.objects.get(user=pk)
     context = {
@@ -91,6 +93,7 @@ def profile_view(request, pk):
     return render(request, 'profile.html', context)
 
 
+@login_required
 def edit_profile_view(request, pk):
     profile = UserProfile.objects.get(user=pk)
     if request.method == 'GET':
