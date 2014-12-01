@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import HttpResponseForbidden
 
 from fb.models import UserPost, UserPostComment, UserProfile
 from fb.forms import (
@@ -96,6 +97,8 @@ def profile_view(request, pk):
 @login_required
 def edit_profile_view(request, pk):
     profile = UserProfile.objects.get(user=pk)
+    if not request.user == profile.user:
+        return HttpResponseForbidden()
     if request.method == 'GET':
         data = {
             'first_name': profile.user.first_name,
