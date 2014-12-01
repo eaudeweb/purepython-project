@@ -2,9 +2,12 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.files.uploadedfile import SimpleUploadedFile
 
-from fb.models import UserPost, UserPostComment
-from fb.forms import UserPostForm, UserPostCommentForm, UserLogin
+from fb.models import UserPost, UserPostComment, UserProfile
+from fb.forms import (
+    UserPostForm, UserPostCommentForm, UserLogin, UserProfileForm,
+)
 
 
 @login_required
@@ -78,3 +81,46 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect(reverse('login'))
+
+
+def profile_view(request, pk):
+    profile = UserProfile.objects.get(user=pk)
+    context = {
+        'profile': profile,
+    }
+    return render(request, 'profile.html', context)
+
+
+def edit_profile_view(request, pk):
+    profile = UserProfile.objects.get(user=pk)
+    if request.method == 'GET':
+        data = {
+            'first_name': profile.user.first_name,
+            'last_name': profile.user.last_name,
+            'gender': profile.gender,
+            'date_of_birth': profile.date_of_birth,
+        }
+        avatar = SimpleUploadedFile(
+            profile.avatar.name, profile.avatar.file.read()) \
+            if profile.avatar else None
+        file_data = {'avatar': avatar}
+        form = UserProfileForm(data, file_data)
+    elif request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile.user.first_name = form.cleaned_data['first_name']
+            profile.user.last_name = form.cleaned_data['last_name']
+            profile.user.save()
+
+            profile.gender = form.cleaned_data['gender']
+            profile.date_of_birth = form.cleaned_data['date_of_birth']
+            if form.cleaned_data['avatar']:
+                profile.avatar = form.cleaned_data['avatar']
+            profile.save()
+
+            return redirect(reverse('profile', args=[profile.pk]))
+    context = {
+        'form': form,
+        'profile': profile,
+    }
+    return render(request, 'edit_profile.html', context)

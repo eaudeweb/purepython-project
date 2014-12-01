@@ -8,6 +8,7 @@
     </a>
     {% if user.is_authenticated %}
       <a href="{% url 'logout' %}">Log Out</a>
+      <a href="{% url 'profile' user.pk %}">My profile</a>
     {% endif %}
     {% block content %}
     {% endblock %}
