@@ -130,3 +130,11 @@ def edit_profile_view(request, user):
         'profile': profile,
     }
     return render(request, 'edit_profile.html', context)
+
+
+@login_required
+def like_view(request, pk):
+    post = UserPost.objects.get(pk=pk)
+    post.likers.add(request.user)
+    post.save()
+    return redirect(reverse('post_details', args=[post.pk]))

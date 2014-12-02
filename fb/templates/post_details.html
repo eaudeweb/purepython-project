@@ -3,6 +3,19 @@
 {% block content %}
   <h3>{{ post.text }}</h3>
   by <b><small>{{ post.author }}</small></b> on <b><small>{{ post.date_added }}</small></b>
+  <br>
+  <a href="{% url 'like' post.pk %}">Like</a>
+  <br>
+  {% if post.likers.count %}
+  Who likes this:
+    {% for liker in post.likers.all %}
+     {{ liker.first_name }}
+     {{ liker.last_name }}
+     {% if not forloop.last %}
+       ,
+     {% endif %}
+    {% endfor %}
+  {% endif %}
   <hr><br>
 
   {% for comment in comments %}
