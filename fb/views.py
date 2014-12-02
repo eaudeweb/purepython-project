@@ -86,8 +86,8 @@ def logout_view(request):
 
 
 @login_required
-def profile_view(request, pk):
-    profile = UserProfile.objects.get(user=pk)
+def profile_view(request, user):
+    profile = UserProfile.objects.get(user__username=user)
     context = {
         'profile': profile,
     }
@@ -95,8 +95,8 @@ def profile_view(request, pk):
 
 
 @login_required
-def edit_profile_view(request, pk):
-    profile = UserProfile.objects.get(user=pk)
+def edit_profile_view(request, user):
+    profile = UserProfile.objects.get(user__username=user)
     if not request.user == profile.user:
         return HttpResponseForbidden()
     if request.method == 'GET':
@@ -124,7 +124,7 @@ def edit_profile_view(request, pk):
                 profile.avatar = form.cleaned_data['avatar']
             profile.save()
 
-            return redirect(reverse('profile', args=[profile.pk]))
+            return redirect(reverse('profile', args=[profile.user.username]))
     context = {
         'form': form,
         'profile': profile,

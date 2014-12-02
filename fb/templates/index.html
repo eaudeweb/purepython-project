@@ -19,7 +19,7 @@
     <a href="{% url 'post_details' post.pk %}"><small>see more</small></a>
     <br>
     by
-    <a href="{% url 'profile' post.author.pk %}">
+    <a href="{% url 'profile' post.author.username %}">
         <b><small>{{ post.author.username }}</small></b></a>
     on <b><small>{{ post.date_added }}</small></b>
     <hr>
