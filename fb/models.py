@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.templatetags.static import static
+from django.conf import settings
 
 
 class UserPost(models.Model):
@@ -43,6 +45,11 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to='images/', blank=False, null=True)
 
     user = models.OneToOneField(User, related_name='profile')
+
+    @property
+    def avatar_url(self):
+        return self.avatar.url if self.avatar \
+            else static(settings.AVATAR_DEFAULT)
 
 
 @receiver(post_save, sender=User)
