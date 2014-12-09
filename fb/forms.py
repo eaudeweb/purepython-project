@@ -8,12 +8,12 @@ from fb.models import UserProfile
 
 class UserPostForm(Form):
     text = CharField(widget=Textarea(
-        attrs={'rows': 5, 'cols': 40, 'placeholder': "What's on your mind?"}))
+        attrs={'rows': 1, 'cols': 40, 'class': 'form-control','placeholder': "What's on your mind?"}))
 
 
 class UserPostCommentForm(Form):
     text = CharField(widget=Textarea(
-        attrs={'rows': 4, 'cols': 50, 'placeholder': "Write a comment..."}))
+        attrs={'rows': 1, 'cols': 50, 'class': 'form-control','placeholder': "Write a comment..."}))
 
 
 class UserLogin(Form):
